@@ -1,0 +1,43 @@
+name: SLUS_004.02
+sha1: 562c82d5888f5cb19a883dbfbf1e61a5fa143cbe
+options:
+  basename: slus_004.02
+  target_path: disc/SLUS_004.02
+  base_path: ..
+  platform: psx
+  compiler: PSYQ
+  asm_path: asm/slus_004.02
+  src_path: src/slus_004.02
+  asset_path: assets/slus_004.02
+  build_path: build
+  ld_script_path: build/slus_004.02.ld
+  find_file_boundaries: False
+  gp_value: 0x8009B9A8
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  section_order: [".rodata", ".data", ".text", ".bss"]
+  symbol_addrs_path:
+    - config/symbols/slus_004.02.txt
+  undefined_funcs_auto_path: build/slus_004.02.undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/slus_004.02.undefined_syms_auto.txt
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+segments:
+  - name: header
+    type: header
+    start: 0x0
+  - name: slus_004.02
+    type: code
+    start: 0x800
+    vram: 0x80010000
+    subsegments:
+      - [0x800, data, tables]
+      - [0x193A0, asm, main]
+      - [0x85A78, data, data]
+      - [0x8C1A8, data, zeroed]
+      - [0xA0D48, asm, init]
+      - [0xA14C0, data, packed]
+  - [0x121800]
