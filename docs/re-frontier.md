@@ -216,7 +216,7 @@ declared host-architecture performance.
 - where: `game/widescreen/*`; shared `guest_widescreen_projection.*`
 - gap: The product still has no completed frame, so final sampling, 4:3 pixel identity, and actual added scene coverage are unverified. A real A/B must also determine whether the authored 600/780 stage-tile visibility wedge culls needed wide-margin tiles; any adjustment must derive from the resolved projection. **Issue 0022 adds a second, independent reason there is no frame to widen: the 11 mode handlers at or above `0x800C0000` hold no code at this frontier. A whole-window word-for-word diff against the authenticated image measures 0 of 256 words differing at each of those 11 handlers, against 9 of 9 in-disc handlers byte-identical, and mode 0's loader writes nothing to any handler address — so the geometry a wider projection would reveal is not resident yet, independently of the CD completion.** Tekken 3 already runs at 60 fps: there remains no native renderer, fps60 mode, interpolation/lerp, or interpolation-supporting temporal pipeline in this title's target scope.
 
-### T3-05 — The CD completion chain, the DMA3 sector tail and the first-sector ordering (resolved)
+### T3-07 — The CD completion chain, the DMA3 sector tail and the first-sector ordering (resolved)
 
 - RE: the linked libcd is a polling design. The ISR `FUN_80084A30` reads the controller flag in
   `FUN_800833A8` and calls the command-complete hook (`0x80099750` = `FUN_80090128`) or the ready hook
@@ -233,3 +233,13 @@ declared host-architecture performance.
   the next GetStat, so the INT1 is lost and the load stalls. The ready hook `FUN_8008F850` installs nothing
   itself; it relies on `FUN_80091F38` (flag `0x8009B8E8 != 1`) having run from the class-2 completion.
 - Not done: no fight input beyond menu navigation; no other file-load sizes enumerated for S011.
+
+### T3-08 — The BNS loader reads through libds
+- status: re-verified
+- deps: T3-07
+- evidence: Disassembly of `0x8006BEA8..0x8006C46C` and the libds leaves it calls (`docs/notes/cd-loader.md`):
+  `DsPacket` `0x8008F08C`, `DsStartReadySystem` `0x80091F38`, `DsEndReadySystem` `0x80091FBC`, `DsGetSector`
+  `0x80090AA8` (onto libcd `CD_getsector` `0x80084838`), `DsIntToPos`/`DsPosToInt` `0x80090B08`/`0x80090C0C`.
+  There is no libcd `CdRead` on the load path.
+- gap: The ten `TEKKEN3.BNS` overlays are not yet images in this repository.
+
